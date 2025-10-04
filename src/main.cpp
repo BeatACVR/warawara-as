@@ -5,7 +5,6 @@
 #include <wups/button_combo/api.h>
 #include <vpad/input.h>
 #include <coreinit/thread.h>
-#include <proc_ui.h>
 
 #include <forward_list>
 
