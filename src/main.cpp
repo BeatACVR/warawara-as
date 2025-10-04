@@ -5,6 +5,9 @@
 #include <wups/button_combo/api.h>
 #include <vpad/input.h>
 #include <coreinit/thread.h>
+#include <coreinit/os.h>
+#include <stdint.h>
+#include <string.h>
 
 #include <forward_list>
 
@@ -42,27 +45,23 @@ DEINITIALIZE_PLUGIN() {
     Gets called when an application starts.
 **/
 ON_APPLICATION_START() {
-    initLogging();
-    DEBUG_FUNCTION_LINE("ON_APPLICATION_START called in swap screens plugin!");
-
-    // only trigger in home menu
-    u64 titleID;
-    OSDGetTitleID(&titleID);
+    // check PID/title ID of current app to run only on home menu
+    uint64_t titleID = OSGetTitleID();
     if(titleID != 0x000500101004A700ULL) // home menu
         return;
 
-    // tiny delay to let home menu frame load
-    svcSleepThread(4000000000); // 50ms
+    // wait a bit to let home menu initialize
+    OSSleepTicks(50000000ULL); // ~50ms
 
     // press X
     VPADStatus status;
     memset(&status, 0, sizeof(VPADStatus));
-    status.btns_h = VPAD_BUTTON_X;
+    status.btns_h = VPAD_BUTTON_X; // devkitppc VPADStatus uses btns_h for held buttons
     VPADWrite(0, &status, sizeof(VPADStatus));
 
     // release X after short delay
-    svcSleepThread(50000000); // 50ms
-    status.btns_h = 0;
+    OSSleepTicks(50000000ULL);
+    memset(&status, 0, sizeof(VPADStatus));
     VPADWrite(0, &status, sizeof(VPADStatus));
 }
 
