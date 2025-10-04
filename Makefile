@@ -26,11 +26,10 @@ export VERSION_PATCH	:=	2
 # DATA is a list of directories containing data files
 # INCLUDES is a list of directories containing header files
 #-------------------------------------------------------------------------------
-TARGET		:=	re_nsyshid
+TARGET		:=	warawara_as
 BUILD		:=	build
-SOURCES		:=	src src/utils src/devices src/config
+SOURCES		:=	src src/utils
 DATA		:=	data
-INCLUDES	:=	src src/include
 
 #-------------------------------------------------------------------------------
 # options for code generation
